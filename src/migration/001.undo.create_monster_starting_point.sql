@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS monster_starting_point;
