@@ -4,14 +4,3 @@ CREATE TABLE monster_moves (
     monster_id INTEGER
         REFERENCES monsters(id) ON DELETE CASCADE NOT NULL
 )
-
-
-/*CREATE TYPE action_type AS ENUM (
-    'Skill',
-    'Action',
-    'Reaction'
-);
-
-ALTER TABLE monster_moves
-  ADD COLUMN
-    style action_type TEXT NOT NULL;*/
