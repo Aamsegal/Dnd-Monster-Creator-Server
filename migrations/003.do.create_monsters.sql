@@ -7,19 +7,20 @@ CREATE TABLE monsters (
     attackBonus INTEGER NOT NULL,
     saveDc INTEGER NOT NULL,
     strength INTEGER NOT NULL,
-    strengthSave Placholder,
+    strengthSave TEXT,
     dexterity INTEGER NOT NULL,
-    dexteritySave placeholer,
+    dexteritySave TEXT,
     constitution INTEGER NOT NULL,
-    constitutionSave placeholder,
+    constitutionSave TEXT,
     inteligence INTEGER NOT NULL,
-    inteligenceSave placeholder,
+    inteligenceSave TEXT,
     wisdom INTEGER NOT NULL,
-    widsomSave placholder,
+    widsomSave TEXT,
     charisma INTEGER NOT NULL,
-    charismaSave placeholder,
+    charismaSave TEXT,
     damageVulnerability TEXT,
     senses TEXT,
     creature_language TEXT,
-
+    user_id INTEGER
+        REFERENCES user_table(id) ON DELETE CASCADE NOT NULL
 )

@@ -11,5 +11,5 @@ CREATE TABLE monster_starting_point (
     attackBonus INTEGER NOT NULL,
     damagePerRoundSuggestion TEXT NOT NULL,
     saveDcSuggestion TEXT NOT NULL,
-    saveDc INTEGER NOT NULL,
+    saveDc INTEGER NOT NULL
 )
