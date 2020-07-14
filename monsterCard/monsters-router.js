@@ -42,6 +42,7 @@ monstersRouter
 
     //grabs all monsters
     .get((req, res, next) => {
+        console.log('base route works')
         const knexInstance = req.app.get('db')
         MonstersService.getAllMonsters(knexInstance)
             .then(monsters => {
@@ -75,6 +76,71 @@ monstersRouter
                     .status(201)
                     .location(path.posix.join(req.originalUrl, `/${monster.id}`))
                     .json(serializeMonster(monster))
+            })
+            .catch(next)
+    })
+
+
+monstersRouter
+    .route('/:id')
+    
+    //Grabs all monster with id X
+    .all((req, res, next) => {
+        MonstersService.getById(
+            req.app.get('db'),
+            req.params.id
+        )
+            .then(monster => {
+                if(!monster) {
+                    return res.status(404).json({
+                        error: {message: `Monster doesnt exist`}
+                    })
+                }
+                res.monster = monster
+                next()
+            })
+            .catch(next)
+    })
+
+    //returns the monsters with the id
+    .get((req, res, next) => {
+        res.json(serializeMonster(res.monster))
+    })
+
+    //deletes the monster data that matches the id
+    .delete((req, res, next) => {
+        MonstersService.deleteMonster(
+            req.app.get('db'),
+            req.params.id
+        )
+            .then(numRowsAffected => {
+                res.status(204).end()
+            })
+            .catch(next)
+    })
+
+    .patch(jsonParser, (req, res, next) => {
+        const {monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, attackbonus,
+            savedc, strength, dexterity, constitution, inteligence, wisdom, charisma, strengthsave, dexteritysave, 
+            constitutionsave, inteligencesave, wisdomsave, charismasave, user_id} = req.body;
+            
+        const updatedMonster = {monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, attackbonus,
+            savedc, strength, dexterity, constitution, inteligence, wisdom, charisma, strengthsave, dexteritysave, 
+            constitutionsave, inteligencesave, wisdomsave, charismasave, user_id};
+        
+        const numberOfValues = Object.values(updatedMonster).filter(Boolean).length
+        if(numberOfValues === 0)
+            return res.status(400).json({
+                error: { message: `Request body must contain new monster information`}
+            })
+        
+        MonstersService.updateMonster(
+            req.app.get('db'),
+            req.params.id,
+            updatedMonster
+        )
+            .then(numRowsAffected => {
+                res.status(204).end()
             })
             .catch(next)
     })
