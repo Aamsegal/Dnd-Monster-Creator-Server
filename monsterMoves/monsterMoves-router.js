@@ -3,6 +3,7 @@ const express = require('express');
 const xss = require('xss');
 const MonsterMovesService = require('./monsterMoves-services');
 const { serialize } = require('v8');
+const { route } = require('../src/app');
 
 const movesRouter = express.Router();
 const jsonParser = express.json();
@@ -54,4 +55,59 @@ movesRouter
             })
             .catch(next)
     })
+
+movesRouter
+    .route('/:move_id')
+
+    //deletes the move with that id
+    .delete((req, res, next) => {
+        MonsterMovesService.deleteMove(
+            req.app.get('db'),
+            req.params.move_id
+        )
+            .then(numRowsAffected => {
+                res.status(204).end()
+            })
+            .catch(next)
+    })
+
+    .patch(jsonParser, (req, res, next) => {
+        const { action_name, action_details, style, monster_id } = req.body;
+        const updatedMove = { action_name, action_details, style, monster_id};
+
+        const numberOfValues = Object.values(updatedMove).filter(Boolean).length
+        if( numberOfValues === 0)
+            return res.status(400).json({
+                error: {message: `Body requies one of the following. action_name, action_details, style, monster_id`}
+            })
+
+        MonsterMovesService.updateMoves(
+            req.app.get('db'),
+            req.params.move_id,
+            updatedMove
+        )
+            .then(numRowAffected => {
+                res.status(204).end()
+            })
+            .catch(next)
+    })
+
+
+
+movesRouter
+    .route('/specificMoves/:monster_id/:style')
+
+    .get((req, res, next) => {
+        MonsterMovesService.getMoveByMonsterIdAndActionType(
+            req.app.get('db'),
+            req.params.monster_id,
+            req.params.style
+        )
+            .then(moves => {
+                res.json(moves.map(serializeMoves))
+            })
+            .catch(next)
+    })
+
+
 module.exports = movesRouter;
