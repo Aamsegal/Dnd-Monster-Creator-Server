@@ -6,4 +6,4 @@ CREATE TYPE action_type AS ENUM (
 
 ALTER TABLE monster_moves
   ADD COLUMN
-    style action_type;
+    style action_type TEXT NOT NULL;

@@ -9,32 +9,32 @@ const jsonParser = express.json();
 
 const serializeMonster = monster => ({
     id: monster.id,
-    monster_name: monster.monster_name,
-    monster_type: monster.monster_type,
-    challenge_rating: monster.challenge_rating,
-    proficiencybonus: monster.proficiencybonus,
-    armorclass: monster.armorclass,
-    hitpoints: monster.hitpoints,
-    attackbonus: monster.attackbonus,
-    savedc: monster.savedc,
-    strength: monster.strength,
-    dexterity: monster.dexterity,
-    constitution: monster.constitution,
-    inteligence: monster.inteligence,
-    wisdom: monster.wisdom,
-    charisma: monster.charisma,
-    strengthsave: monster.strengthsave,
-    dexteritysave: monster.dexteritysave,
-    constitutionsave: monster.constitutionsave,
-    inteligencesave: monster.inteligencesave,
-    wisdomsave: monster.wisdomsave,
-    charismasave: monster.charismasave,
-    vulnerability: monster.damagevulnerability,
-    resistance: monster.damageresistance,
-    immunities: monster.damageimmunities,
-    senses: monster.senses,
-    language: monster.creature_language,
-    user_id: monster.user_id,
+    monster_name: xss(monster.monster_name),
+    monster_type: xss(monster.monster_type),
+    challenge_rating: xss(monster.challenge_rating),
+    proficiencybonus: xss(monster.proficiencybonus),
+    armorclass: xss(monster.armorclass),
+    hitpoints: xss(monster.hitpoints),
+    attackbonus: xss(monster.attackbonus),
+    savedc: xss(monster.savedc),
+    strength: xss(monster.strength),
+    dexterity: xss(monster.dexterity),
+    constitution: xss(monster.constitution),
+    inteligence: xss(monster.inteligence),
+    wisdom: xss(monster.wisdom),
+    charisma: xss(monster.charisma),
+    strengthsave: xss(monster.strengthsave),
+    dexteritysave: xss(monster.dexteritysave),
+    constitutionsave: xss(monster.constitutionsave),
+    inteligencesave: xss(monster.inteligencesave),
+    wisdomsave: xss(monster.wisdomsave),
+    charismasave: xss(monster.charismasave),
+    vulnerability: xss(monster.damagevulnerability),
+    resistance: xss(monster.damageresistance),
+    immunities: xss(monster.damageimmunities),
+    senses: xss(monster.senses),
+    language: xss(monster.creature_language),
+    user_id: xss(monster.user_id),
 })
 
 monstersRouter
@@ -144,5 +144,29 @@ monstersRouter
             })
             .catch(next)
     })
+
+monstersRouter
+    .route('/userId/:user_id')
+
+    //Grabs all the monsters with the correct user id
+    .get((req, res, next) => {
+        MonstersService.getAllByUserId(
+            req.app.get('db'),
+            req.params.user_id
+        )
+            .then( monster => {
+                console.log(monster)
+                if(monster === []) {
+                    return res.statsus(404).json({
+                        error: {message: `User id does not have any monsters`}
+                    })
+                } else{
+                    res.json(monster.map(serializeMonster))
+                }
+                
+            })
+            .catch(next)  
+    })
+    //Currently the if statement never gets called
 
 module.exports = monstersRouter;
