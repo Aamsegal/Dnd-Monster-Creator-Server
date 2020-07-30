@@ -42,7 +42,6 @@ monstersRouter
 
     //grabs all monsters
     .get((req, res, next) => {
-        console.log('base route works')
         const knexInstance = req.app.get('db')
         MonstersService.getAllMonsters(knexInstance)
             .then(monsters => {
@@ -53,19 +52,29 @@ monstersRouter
 
     //adds a monster
     .post(jsonParser, (req, res, next) => {
+
         const {monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, attackbonus,
         savedc, strength, dexterity, constitution, inteligence, wisdom, charisma, strengthsave, dexteritysave, 
-        constitutionsave, inteligencesave, wisdomsave, charismasave, user_id} = req.body;
-        
-        const newMonster = {monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, attackbonus,
+        constitutionsave, inteligencesave, wisdomsave, charismasave,damagevulnerability, damageresistances, damageimmunities,
+        senses,creature_language, notes, user_id} = req.body;
+
+        const requriedInfo = {monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, attackbonus,
             savedc, strength, dexterity, constitution, inteligence, wisdom, charisma, strengthsave, dexteritysave, 
             constitutionsave, inteligencesave, wisdomsave, charismasave, user_id};
 
-        for(const [key, value] of Object.entries(newMonster))
-            if(value == null)
+        const notRequiredInfo = {damagevulnerability, damageresistances, damageimmunities, senses, creature_language, notes}
+
+        for(const [key, value] of Object.entries(requriedInfo)) {
+            if(value === '')
                 return res.status(400).json({
-                    error: {message: `Missing '${key} in request body`}
+                    error: {message: `Missing '${key}' in request body`}
                 })
+        }
+        
+        let newMonster = {
+            ...requriedInfo,
+            ...notRequiredInfo
+        }
 
         MonstersService.insertMonster(
             req.app.get('db'),

@@ -19,6 +19,16 @@ const serializeMoves = moves =>({
 movesRouter
     .route('/')
 
+    .get((req, res, next) => {
+        const knexInstance = req.app.get('db')
+
+        MonsterMovesService.getAllMoves(knexInstance)
+            .then(monsterMoves => {
+                res.json(monsterMoves.map(serializeMoves))
+            })
+            .catch(next)
+    })
+
     .post(jsonParser, (req, res, next) => {
         //accesses all the values in the body that match
         const { action_name, action_details, style, monster_id } = req.body;

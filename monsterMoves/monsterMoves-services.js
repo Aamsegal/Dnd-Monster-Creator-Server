@@ -1,5 +1,9 @@
 const MonsterMovesService = {
     //grabs moves by monster id and action type
+    getAllMoves(knex) {
+        return knex.select('*').from('monster_moves')
+    },
+
     getMoveByMonsterIdAndActionType(knex, monster_id, style) {
         return knex.select('*').from('monster_moves').where('monster_id', monster_id).where('style', style)
     },
