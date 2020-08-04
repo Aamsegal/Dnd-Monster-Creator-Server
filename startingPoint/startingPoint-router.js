@@ -27,7 +27,6 @@ startingPointRouter
         const knexInstance = req.app.get('db')
         StartingPointServices.getAllCombatRating(knexInstance)
             .then(startingPoints => {
-                console.log(startingPoints)
                 res.json(startingPoints)
             })
             .catch(next)
