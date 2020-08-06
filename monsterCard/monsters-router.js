@@ -34,6 +34,7 @@ const serializeMonster = monster => ({
     immunities: xss(monster.damageimmunities),
     senses: xss(monster.senses),
     language: xss(monster.creature_language),
+    notes: xss(monster.notes),
     user_id: xss(monster.user_id),
 })
 

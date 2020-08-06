@@ -6,6 +6,7 @@ CREATE TABLE monsters (
     proficiencyBonus INTEGER NOT NULL,
     armorClass INTEGER NOT NULL,
     hitPoints INTEGER NOT NULL,
+    speed TEXT NOT NULL,
     attackBonus INTEGER NOT NULL,
     saveDc INTEGER NOT NULL,
     strength INTEGER NOT NULL,
@@ -25,7 +26,7 @@ CREATE TABLE monsters (
     damageImmunities TEXT,
     senses TEXT,
     creature_language TEXT,
-    monsterNotes TEXT,
+    notes TEXT,
     user_id INTEGER
         REFERENCES user_table(id) ON DELETE CASCADE NOT NULL
 )
