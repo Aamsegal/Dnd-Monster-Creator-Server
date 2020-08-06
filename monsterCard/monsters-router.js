@@ -16,6 +16,7 @@ const serializeMonster = monster => ({
     armorclass: xss(monster.armorclass),
     hitpoints: xss(monster.hitpoints),
     attackbonus: xss(monster.attackbonus),
+    speed: xss(monster.speed),
     savedc: xss(monster.savedc),
     strength: xss(monster.strength),
     dexterity: xss(monster.dexterity),
@@ -30,7 +31,7 @@ const serializeMonster = monster => ({
     wisdomsave: xss(monster.wisdomsave),
     charismasave: xss(monster.charismasave),
     vulnerability: xss(monster.damagevulnerability),
-    resistance: xss(monster.damageresistance),
+    resistance: xss(monster.damageresistances),
     immunities: xss(monster.damageimmunities),
     senses: xss(monster.senses),
     language: xss(monster.creature_language),
@@ -55,12 +56,12 @@ monstersRouter
     .post(jsonParser, (req, res, next) => {
 
         const {monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, attackbonus,
-        savedc, strength, dexterity, constitution, inteligence, wisdom, charisma, strengthsave, dexteritysave, 
+        savedc, speed, strength, dexterity, constitution, inteligence, wisdom, charisma, strengthsave, dexteritysave, 
         constitutionsave, inteligencesave, wisdomsave, charismasave,damagevulnerability, damageresistances, damageimmunities,
         senses,creature_language, notes, user_id} = req.body;
 
         const requriedInfo = {monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, attackbonus,
-            savedc, strength, dexterity, constitution, inteligence, wisdom, charisma, strengthsave, dexteritysave, 
+            savedc, speed, strength, dexterity, constitution, inteligence, wisdom, charisma, strengthsave, dexteritysave, 
             constitutionsave, inteligencesave, wisdomsave, charismasave, user_id};
 
         const notRequiredInfo = {damagevulnerability, damageresistances, damageimmunities, senses, creature_language, notes}
