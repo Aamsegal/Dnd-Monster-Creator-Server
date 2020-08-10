@@ -31,10 +31,10 @@ movesRouter
 
     .post(jsonParser, (req, res, next) => {
         //accesses all the values in the body that match
-        const { action_name, action_details, style, monster_id } = req.body;
+        const { id, action_name, action_details, damage_dice, style, monster_id } = req.body;
 
         //saves those values to newMove
-        const newMove = { action_name, action_details, style, monster_id };
+        const newMove = { id, action_name, action_details, damage_dice, style, monster_id };
 
         //checks if any values are null
         for(const [key, value] of Object.entries(newMove))
@@ -45,9 +45,8 @@ movesRouter
 
         //Checks if style is = to one one of the style data values        
         if(newMove.style === 'Action' || newMove.style === 'Reaction' || newMove.style == 'Skill') {
-            console.log(newMove)
+
         } else {
-            console.log(newMove.style)
             return res.status(400).json({
                 error: {message: 'Please make sure the action style is either, Action, Reaction or Skill'}
             })

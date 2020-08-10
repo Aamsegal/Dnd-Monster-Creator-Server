@@ -166,7 +166,6 @@ monstersRouter
             req.params.user_id
         )
             .then( monster => {
-                console.log(monster)
                 if(monster === []) {
                     return res.statsus(404).json({
                         error: {message: `User id does not have any monsters`}
