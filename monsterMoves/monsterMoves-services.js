@@ -4,6 +4,10 @@ const MonsterMovesService = {
         return knex.select('*').from('monster_moves')
     },
 
+    getMoveByMonsterId(knex, monster_id) {
+        return knex.select('*').from('monster_moves').where('monster_id', monster_id)
+    },
+
     getMoveByMonsterIdAndActionType(knex, monster_id, style) {
         return knex.select('*').from('monster_moves').where('monster_id', monster_id).where('style', style)
     },

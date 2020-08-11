@@ -101,6 +101,20 @@ movesRouter
             .catch(next)
     })
 
+movesRouter
+    .route('/specificMonster/:monster_id')
+    
+    .get((req,res,next) => {
+        MonsterMovesService.getMoveByMonsterId(
+            req.app.get('db'),
+            req.params.monster_id
+        )
+            .then(moves => {
+                res.json(moves.map(serializeMoves))
+            })
+            .catch(next)
+    })
+
 
 
 movesRouter
