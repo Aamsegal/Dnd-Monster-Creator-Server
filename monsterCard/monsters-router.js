@@ -93,7 +93,7 @@ monstersRouter
 
 
 monstersRouter
-    .route('/:id')
+    .route('/monsterId/:id')
     
     //Grabs all monster with id X
     .all((req, res, next) => {
