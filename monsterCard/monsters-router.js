@@ -3,6 +3,7 @@ const express = require('express');
 const xss = require('xss');
 const MonstersService = require('./monsters-services');
 const { serialize } = require('v8');
+const app = require('../src/app');
 
 const monstersRouter = express.Router();
 const jsonParser = express.json();
@@ -24,12 +25,6 @@ const serializeMonster = monster => ({
     inteligence: xss(monster.inteligence),
     wisdom: xss(monster.wisdom),
     charisma: xss(monster.charisma),
-    strengthsave: xss(monster.strengthsave),
-    dexteritysave: xss(monster.dexteritysave),
-    constitutionsave: xss(monster.constitutionsave),
-    inteligencesave: xss(monster.inteligencesave),
-    wisdomsave: xss(monster.wisdomsave),
-    charismasave: xss(monster.charismasave),
     vulnerability: xss(monster.damagevulnerability),
     resistance: xss(monster.damageresistances),
     immunities: xss(monster.damageimmunities),
@@ -43,26 +38,24 @@ monstersRouter
     .route('/')
 
     //grabs all monsters
-    .get((req, res, next) => {
+    /*.get((req, res, next) => {
         const knexInstance = req.app.get('db')
         MonstersService.getAllMonsters(knexInstance)
             .then(monsters => {
                 res.json(monsters.map(serializeMonster))
             })
             .catch(next)
-    })
+    })*/
 
     //adds a monster
     .post(jsonParser, (req, res, next) => {
+        console.log('Post request is called in monsters routers')
+        const {id, monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, speed, attackbonus,
+        savedc, strength, dexterity, constitution, inteligence, wisdom, charisma, damagevulnerability, damageresistances, damageimmunities,
+        senses, creature_language, notes, user_id} = req.body;
 
-        const {monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, attackbonus,
-        savedc, speed, strength, dexterity, constitution, inteligence, wisdom, charisma, strengthsave, dexteritysave, 
-        constitutionsave, inteligencesave, wisdomsave, charismasave,damagevulnerability, damageresistances, damageimmunities,
-        senses,creature_language, notes, user_id} = req.body;
-
-        const requriedInfo = {monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, attackbonus,
-            savedc, speed, strength, dexterity, constitution, inteligence, wisdom, charisma, strengthsave, dexteritysave, 
-            constitutionsave, inteligencesave, wisdomsave, charismasave, user_id};
+        const requriedInfo = {id, monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, attackbonus,
+            savedc, speed, strength, dexterity, constitution, inteligence, wisdom, charisma, user_id};
 
         const notRequiredInfo = {damagevulnerability, damageresistances, damageimmunities, senses, creature_language, notes}
 
@@ -96,7 +89,8 @@ monstersRouter
     .route('/monsterId/:id')
     
     //Grabs all monster with id X
-    .all((req, res, next) => {
+    /*.all((req, res, next) => {
+        console.log('.all is called in monsters router')
         MonstersService.getById(
             req.app.get('db'),
             req.params.id
@@ -111,11 +105,29 @@ monstersRouter
                 next()
             })
             .catch(next)
-    })
+    })*/
 
-    //returns the monsters with the id
+    //returns the monster with the id
     .get((req, res, next) => {
-        res.json(serializeMonster(res.monster))
+
+        MonstersService.getById(
+            req.app.get('db'),
+            req.params.id
+        )
+            .then(monster => {
+                if(!monster) {
+                    return res.status(404).json({
+                        error: {message: `Monster doesnt exist`}
+                    })
+                }
+
+                res.json(serializeMonster(res.monster))
+
+                next()
+            })
+            
+            .catch(next)
+            
     })
 
     //deletes the monster data that matches the id
@@ -123,37 +135,89 @@ monstersRouter
         MonstersService.deleteMonster(
             req.app.get('db'),
             req.params.id
-        )
+        )   
+            
             .then(numRowsAffected => {
                 res.status(204).end()
             })
             .catch(next)
     })
 
+    //  Attepts to patch the monster id. If it doesnt exist it routes to a post request
     .patch(jsonParser, (req, res, next) => {
-        const {monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, attackbonus,
-            savedc, strength, dexterity, constitution, inteligence, wisdom, charisma, strengthsave, dexteritysave, 
-            constitutionsave, inteligencesave, wisdomsave, charismasave, user_id} = req.body;
+        const   {id, monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, speed, attackbonus, savedc,
+                    strength, dexterity, constitution, inteligence, wisdom, charisma,  damagevulnerability, damageresistances, 
+                    damageimmunities, senses, creature_language, notes
+                } = req.body;
             
-        const updatedMonster = {monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, attackbonus,
-            savedc, strength, dexterity, constitution, inteligence, wisdom, charisma, strengthsave, dexteritysave, 
-            constitutionsave, inteligencesave, wisdomsave, charismasave, user_id};
+        const updatedMonster = {id, monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, speed, attackbonus, savedc,
+                    strength, dexterity, constitution, inteligence, wisdom, charisma, damagevulnerability, damageresistances, damageimmunities, 
+                    senses, creature_language, notes};
         
         const numberOfValues = Object.values(updatedMonster).filter(Boolean).length
         if(numberOfValues === 0)
             return res.status(400).json({
                 error: { message: `Request body must contain new monster information`}
             })
+
         
         MonstersService.updateMonster(
             req.app.get('db'),
             req.params.id,
             updatedMonster
         )
-            .then(numRowsAffected => {
-                res.status(204).end()
+
+            .then(monster => {
+                if(!monster) {
+                    console.log('patch does work and post is made in monster router')
+                    const {id, monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, speed, attackbonus,
+                        savedc, strength, dexterity, constitution, inteligence, wisdom, charisma, damagevulnerability, damageresistances, damageimmunities,
+                        senses, creature_language, notes, user_id} = req.body;
+                
+                        const requriedInfo = {id, monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, attackbonus,
+                            savedc, speed, strength, dexterity, constitution, inteligence, wisdom, charisma, user_id};
+                
+                        const notRequiredInfo = {damagevulnerability, damageresistances, damageimmunities, senses, creature_language, notes}
+                
+                        for(const [key, value] of Object.entries(requriedInfo)) {
+                            if(value === '')
+                                return res.status(400).json({
+                                    error: {message: `Missing '${key}' in request body`}
+                                })
+                        }
+                        
+                        let newMonster = {
+                            ...requriedInfo,
+                            ...notRequiredInfo
+                        }
+                
+                        MonstersService.insertMonster(
+                            req.app.get('db'),
+                            newMonster
+                        )
+                            .then(monster => {
+                                res
+                                    .status(201)
+                                    .location(path.posix.join(req.originalUrl, `/${monster.id}`))
+                                    .json(serializeMonster(monster))
+                            })
+                            .catch(next)
+
+                } else {
+                    res
+                        .status(204).end()
+
+                    next()
+                }
+
+                
+            })  
+            
+            .catch(error => {
+                console.error({error})
             })
-            .catch(next)
+        
+        
     })
 
 monstersRouter

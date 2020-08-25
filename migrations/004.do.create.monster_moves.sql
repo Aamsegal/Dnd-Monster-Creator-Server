@@ -3,6 +3,5 @@ CREATE TABLE monster_moves (
     action_name TEXT NOT NULL,
     action_details TEXT NOT NULL,
     damage_dice TEXT NOT NULL,
-    monster_id INTEGER
-        REFERENCES monsters(id) ON DELETE CASCADE NOT NULL
+    monster_id TEXT REFERENCES monsters(id) ON DELETE CASCADE NOT NULL
 )

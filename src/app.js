@@ -7,6 +7,7 @@ const { NODE_ENV } = require('./config')
 const startingPointRouter = require('../startingPoint/startingPoint-router')
 const monstersRouter = require('../monsterCard/monsters-router')
 const movesRouter = require('../monsterMoves/monsterMoves-router')
+const userRouter = require('../users/users-router')
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use(cors())
 app.use('/api/monsterStartingPoint', startingPointRouter)
 app.use('/api/monsters', monstersRouter)
 app.use('/api/monsterMoves', movesRouter)
+app.use('/api/users', userRouter)
 //app.use('/api/monsterSkills',)
 //app.use('/api/monsterSpells',)
 

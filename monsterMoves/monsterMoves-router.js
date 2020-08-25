@@ -95,9 +95,46 @@ movesRouter
             req.params.move_id,
             updatedMove
         )
-            .then(numRowAffected => {
-                res.status(204).end()
+        
+            .then(moves => {
+                if(!moves) {
+                    const { id, action_name, action_details, damage_dice, style, monster_id } = req.body;
+
+                    //saves those values to newMove
+                    const newMove = { id, action_name, action_details, damage_dice, style, monster_id };
+
+                    //checks if any values are null
+                    for(const [key, value] of Object.entries(newMove))
+                        if(value == null)
+                            return res.status(400).json({
+                                error: {message: `Missing '${key} in request body'`}
+                            })
+
+                    //Checks if style is = to one one of the style data values        
+                    if(newMove.style === 'Action' || newMove.style === 'Reaction' || newMove.style == 'Skill') {
+
+                    } else {
+                        return res.status(400).json({
+                            error: {message: 'Please make sure the action style is either, Action, Reaction or Skill'}
+                        })
+                    }
+
+                    MonsterMovesService.insertMove(
+                        req.app.get('db'),
+                        newMove
+                    )
+                        .then(move => {
+                            res
+                                .status(201)
+                                .location(path.posix.join(req.originalUrl, `/${move.id}`))
+                                .json(serializeMoves(move))
+                        })
+                        .catch(next)
+                } else{
+                    res.status(204).end()
+                }
             })
+            
             .catch(next)
     })
 
