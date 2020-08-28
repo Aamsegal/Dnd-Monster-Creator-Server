@@ -37,19 +37,8 @@ const serializeMonster = monster => ({
 monstersRouter
     .route('/')
 
-    //grabs all monsters
-    /*.get((req, res, next) => {
-        const knexInstance = req.app.get('db')
-        MonstersService.getAllMonsters(knexInstance)
-            .then(monsters => {
-                res.json(monsters.map(serializeMonster))
-            })
-            .catch(next)
-    })*/
-
     //adds a monster
     .post(jsonParser, (req, res, next) => {
-        console.log('Post request is called in monsters routers')
         const {id, monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, speed, attackbonus,
         savedc, strength, dexterity, constitution, inteligence, wisdom, charisma, damagevulnerability, damageresistances, damageimmunities,
         senses, creature_language, notes, user_id} = req.body;
@@ -87,25 +76,6 @@ monstersRouter
 
 monstersRouter
     .route('/monsterId/:id')
-    
-    //Grabs all monster with id X
-    /*.all((req, res, next) => {
-        console.log('.all is called in monsters router')
-        MonstersService.getById(
-            req.app.get('db'),
-            req.params.id
-        )
-            .then(monster => {
-                if(!monster) {
-                    return res.status(404).json({
-                        error: {message: `Monster doesnt exist`}
-                    })
-                }
-                res.monster = monster
-                next()
-            })
-            .catch(next)
-    })*/
 
     //returns the monster with the id
     .get((req, res, next) => {
@@ -169,7 +139,6 @@ monstersRouter
 
             .then(monster => {
                 if(!monster) {
-                    console.log('patch does work and post is made in monster router')
                     const {id, monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, speed, attackbonus,
                         savedc, strength, dexterity, constitution, inteligence, wisdom, charisma, damagevulnerability, damageresistances, damageimmunities,
                         senses, creature_language, notes, user_id} = req.body;

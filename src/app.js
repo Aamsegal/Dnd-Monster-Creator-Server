@@ -23,8 +23,6 @@ app.use('/api/monsterStartingPoint', startingPointRouter)
 app.use('/api/monsters', monstersRouter)
 app.use('/api/monsterMoves', movesRouter)
 app.use('/api/users', userRouter)
-//app.use('/api/monsterSkills',)
-//app.use('/api/monsterSpells',)
 
 app.get('/', (req, res) => {
     res.send('Hello, World!')
