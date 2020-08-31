@@ -51,7 +51,7 @@ monstersRouter
         for(const [key, value] of Object.entries(requriedInfo)) {
             if(value === '')
                 return res.status(400).json({
-                    error: {message: `Missing '${key}' in request body`}
+                    error: {message: `Missing '${key}`}
                 })
         }
         
