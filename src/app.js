@@ -25,7 +25,7 @@ app.use('/api/monsterMoves', movesRouter)
 app.use('/api/users', userRouter)
 
 app.get('/', (req, res) => {
-    res.send('Hello, World!')
+    res.send('Dnd monster creator server is running!')
 })
 
 app.get('/xss', (req, res) => {
