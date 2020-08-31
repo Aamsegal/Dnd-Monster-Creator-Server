@@ -29,6 +29,7 @@
     "morgan": "^1.10.0",
     "organ": "0.0.0",
     "pg": "^8.2.1",
+    "postgrator-cli": "^3.2.0",
     "xss": "^1.0.7"
   },
   "devDependencies": {
