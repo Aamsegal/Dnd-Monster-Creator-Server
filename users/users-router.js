@@ -15,9 +15,9 @@ userRouter
     .route('/')
 
     .post(jsonParser, (req, res, next) => {
-        const { username, password } = req.body;
+        const { username, userpass } = req.body;
 
-        const newUser = { username, password };
+        const newUser = { username, userpass };
 
         UserServices.insertUser(
             req.app.get('db'),
@@ -35,13 +35,13 @@ userRouter
     })
 
 userRouter
-    .route('/:username/:password')
+    .route('/:username/:userpass')
 
     .get((req, res, next) => {
         UserServices.getByUserAndId(
             req.app.get('db'),
             req.params.username,
-            req.params.password
+            req.params.userpass
         )
 
         .then(user => {
