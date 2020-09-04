@@ -10,8 +10,8 @@ const UserServices = {
             })
     },
 
-    getByUserAndId(knex, id, username) {
-        return knex.from('user_table').select('*').where('id', id).where('username', username)
+    getByUserAndId(knex, password, username) {
+        return knex.from('user_table').select('*').where('username', username).where('password', password)
 
     }
 }
