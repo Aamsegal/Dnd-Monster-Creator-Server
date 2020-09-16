@@ -14,6 +14,8 @@ const UserServices = {
         return knex.from('user_table').select('*').where('username', username).where('userpass', userpass)
 
     }
+
+
 }
 
 module.exports = UserServices;

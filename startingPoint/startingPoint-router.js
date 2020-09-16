@@ -27,9 +27,19 @@ startingPointRouter
         const knexInstance = req.app.get('db')
         StartingPointServices.getAllCombatRating(knexInstance)
             .then(startingPoints => {
-                res.json(startingPoints)
+                res
+                    .status(200)
+                    .json(startingPoints)
             })
             .catch(next)
+    })
+
+startingPointRouter
+    .route('/testingRouterTest')
+    .get((req, res) => {
+        res
+            .status(200)
+            .send('The test endpoint works!')
     })
 
 module.exports = startingPointRouter;
