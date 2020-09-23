@@ -39,6 +39,7 @@ describe('Starting Point', () => {
 
 })*/
 
+/*
 describe('Create new user', () => {
     //const knexInstance = req.app.get('db')
 
@@ -54,6 +55,7 @@ describe('Create new user', () => {
             .expect(201, 'test')
     })
 })
+*/
 
 /*Starting Point tests
 describe('Starting Point Service Object', () => {

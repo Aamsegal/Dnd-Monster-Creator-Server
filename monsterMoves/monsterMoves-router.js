@@ -12,6 +12,7 @@ const serializeMoves = moves =>({
     id: moves.id,
     action_name: xss(moves.action_name),
     action_details: xss(moves.action_details),
+    damage_dice: xss(moves.damage_dice),
     style: xss(moves.style),
     monster_id: xss(moves.monster_id),
 })
