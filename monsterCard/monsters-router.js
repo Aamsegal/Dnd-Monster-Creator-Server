@@ -38,6 +38,7 @@ monstersRouter
     .route('/')
 
     //adds a monster
+    //  Has two grouped of body requests, requiredInfo and notRequiredInfo. 
     .post(jsonParser, (req, res, next) => {
         const {id, monster_name, monster_type, challenge_rating, proficiencybonus, armorclass, hitpoints, speed, attackbonus,
         savedc, strength, dexterity, constitution, inteligence, wisdom, charisma, damagevulnerability, damageresistances, damageimmunities,
@@ -48,6 +49,7 @@ monstersRouter
 
         const notRequiredInfo = {damagevulnerability, damageresistances, damageimmunities, senses, creature_language, notes}
 
+        //Checks if any of the values in requiredInfo is empty and tells the user they are missing it
         for(const [key, value] of Object.entries(requriedInfo)) {
             if(value === '')
                 return res.status(400).json({

@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const xss = require('xss');
 const UserServices = require('./users-services');
+const { v4: uuidv4 } = require('uuid');
 
 const userRouter = express.Router();
 const jsonParser = express.json();
@@ -17,7 +18,9 @@ userRouter
     .post(jsonParser, (req, res, next) => {
         const { username, userpass } = req.body;
 
-        const newUser = { username, userpass };
+        const id = uuidv4();
+
+        const newUser = { id, username, userpass };
 
         UserServices.insertUser(
             req.app.get('db'),

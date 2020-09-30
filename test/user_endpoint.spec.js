@@ -1,6 +1,7 @@
 const { expect } = require('chai');
 const knex = require('knex');
 const supertest = require('supertest');
+const { v4: uuidv4 } = require('uuid');
 
 const app = require('../src/app');
 
@@ -20,9 +21,12 @@ describe('User endpoints', function() {
     //before('clean the table', () => db('user_table').truncate())
 
     context('Given this new user information', () => {
+        const uniqueId = uuidv4();
+
         const testUser = {
             username: 'testUser_1',
-            userpass: 'testPassword_1'
+            userpass: 'testPassword_1',
+            userId: uniqueId
         };
 
         /*

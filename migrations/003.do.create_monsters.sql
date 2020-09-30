@@ -21,5 +21,5 @@ CREATE TABLE monsters (
     senses TEXT,
     creature_language TEXT,
     notes TEXT,
-    user_id INTEGER REFERENCES user_table(id) ON DELETE CASCADE NOT NULL
+    user_id TEXT REFERENCES user_table(id) ON DELETE CASCADE NOT NULL
 )
