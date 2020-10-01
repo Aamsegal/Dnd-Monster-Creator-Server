@@ -33,13 +33,5 @@ startingPointRouter
             })
             .catch(next)
     })
-
-startingPointRouter
-    .route('/testingRouterTest')
-    .get((req, res) => {
-        res
-            .status(200)
-            .send('The test endpoint works!')
-    })
-
+    
 module.exports = startingPointRouter;
