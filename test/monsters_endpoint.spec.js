@@ -21,8 +21,6 @@ describe('Monster + MonsterMoves Endpoints', function() {
     const monsterId = uuidv4();
 
     context('Given this new monster information', () => {
-        
-        //console.log(monsterId)
 
         const testMonster = {
             id: monsterId, monster_name: 'Monster Name X', monster_type: 'Gnome', 
