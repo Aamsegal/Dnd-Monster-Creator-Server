@@ -50,7 +50,7 @@ describe('Monster + MonsterMoves Endpoints', function() {
                 })
         })
 
-        it('Post /monsters responds with 202 and the monster info', () => {
+        it('Get /monsters responds with 202 and the monster info', () => {
             return supertest(app)
                 .get(`/api/monsters/userId/${1}`)
                 .expect(200, [{
